@@ -1,0 +1,24 @@
+# Example application.properties for SpringAIQuickStart
+# This file is safe to commit to Git. It contains placeholders instead of secrets.
+
+spring.application.name=SpringAIQuickStart
+
+server.port=8080
+
+# DeepSeek configuration (example placeholders)
+# Copy this file to src/main/resources/application.properties and fill in the real values locally.
+spring.ai.deepseek.base-url=https://api.deepseek.com/
+# DO NOT commit your real API key. Replace the value below in your local application.properties
+spring.ai.deepseek.api-key=YOUR_DEEPSEEK_API_KEY_HERE
+spring.ai.deepseek.chat.options.model=deepseek-chat
+# model options
+spring.ai.deepseek.chat.options.temperature=0.8
+
+# Notes:
+# 1) Add "src/main/resources/application.properties" to your .gitignore to avoid committing secrets.
+# 2) You can also use environment variables or external config mechanisms for the API key in production.
+#    For example, set SPRING_AI_DEEPSEEK_API_KEY in your environment and reference it via ${SPRING_AI_DEEPSEEK_API_KEY}.
+# 3) To use this template locally, run:
+#    copy src\main\resources\application.properties.example src\main\resources\application.properties
+#    (Then edit the copied file and put your real API key.)
+
