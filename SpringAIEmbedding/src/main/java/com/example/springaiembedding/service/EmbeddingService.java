@@ -58,7 +58,7 @@ public class EmbeddingService {
         knowledgeBaseEmbeddings.clear();
 
         for (String text : knowledgeBase) {
-            EmbeddingResponse response = embedPassage(text);
+            EmbeddingResponse response = embedPassageText(text);
             List<Double> vector = response.getEmbedding();
             if (vector != null && !vector.isEmpty()) {
                 knowledgeBaseEmbeddings.put(text, vector);
@@ -71,7 +71,15 @@ public class EmbeddingService {
     }
 
     public EmbeddingResponse embed(String message) {
-        return embedPassage(message);
+        return embedPassageText(message);
+    }
+
+    public EmbeddingResponse embedPassageText(String text) {
+        return embedByInputType(text, "passage");
+    }
+
+    public EmbeddingResponse embedQueryText(String text) {
+        return embedByInputType(text, "query");
     }
 
     public String searchMostSimilarText(String query) {
@@ -79,7 +87,7 @@ public class EmbeddingService {
             return "知识库向量还没有初始化完成，请稍后再试。";
         }
 
-        EmbeddingResponse queryEmbeddingResponse = embedQuery(query);
+        EmbeddingResponse queryEmbeddingResponse = embedQueryText(query);
         List<Double> queryVector = queryEmbeddingResponse.getEmbedding();
         if (queryVector == null || queryVector.isEmpty()) {
             return "查询文本向量化失败：" + queryEmbeddingResponse.getError();
@@ -98,14 +106,6 @@ public class EmbeddingService {
         }
 
         return bestMatch;
-    }
-
-    private EmbeddingResponse embedPassage(String text) {
-        return embedByInputType(text, "passage");
-    }
-
-    private EmbeddingResponse embedQuery(String text) {
-        return embedByInputType(text, "query");
     }
 
     private EmbeddingResponse embedByInputType(String text, String inputType) {
