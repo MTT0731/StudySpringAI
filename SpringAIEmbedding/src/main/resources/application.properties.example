@@ -1,0 +1,17 @@
+# Example config (no secrets) - safe to commit
+spring.application.name=SpringAIEmbedding
+server.port=8080
+
+# DeepSeek (chat) - replace with your values
+spring.ai.deepseek.base-url=https://api.deepseek.com/
+spring.ai.deepseek.api-key=
+spring.ai.deepseek.chat.options.model=deepseek-chat
+
+# Embedding provider
+embedding.base-url=https://integrate.api.nvidia.com/v1
+embedding.api-key=
+embedding.model=llama-nemotron-embed-vl-1b-v2
+
+# logs
+logging.pattern.console=%-5level %logger - %msg%n
+

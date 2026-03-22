@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Embedding Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f5f7fb; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+    .card { background:white; width:720px; max-width:95%; padding:24px; border-radius:12px; box-shadow:0 8px 24px rgba(111,18,32,0.08); }
+    h1 { margin:0 0 12px 0; font-size:20px; }
+    .controls { display:flex; gap:8px; margin-bottom:12px; }
+    input[type=text] { flex:1; padding:10px 12px; border-radius:8px; border:1px solid #e3e8ee; }
+    button { padding:10px 14px; border-radius:8px; border:0; background:#2563eb; color:white; cursor:pointer; }
+    pre { background:#0b1220; color:#e6eef8; padding:12px; border-radius:8px; overflow:auto; }
+    .meta { font-size:13px; color:#6b7280; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Embedding Demo</h1>
+    <p class="meta">输入一段文本，可以选择查看 embedding 原始结果，或者检索知识库里最相似的一条文本。</p>
+    <div class="controls">
+      <input id="message" type="text" placeholder="请输入一句话" value="Hello Spring AI" />
+      <button id="embedBtn">生成向量</button>
+      <button id="searchBtn">相似检索</button>
+    </div>
+    <div>
+      <h3>Response</h3>
+      <pre id="out">还没有发送请求</pre>
+    </div>
+  </div>
+
+  <script>
+    const out = document.getElementById('out');
+    const input = document.getElementById('message');
+    const embedBtn = document.getElementById('embedBtn');
+    const searchBtn = document.getElementById('searchBtn');
+
+    embedBtn.addEventListener('click', async () => {
+      const msg = input.value.trim();
+      if (!msg) return;
+      out.textContent = '正在请求 embedding...';
+      try {
+        const url = `/api/embedding/embed?message=${encodeURIComponent(msg)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        out.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        out.textContent = '请求失败: ' + e.message;
+      }
+    });
+
+    searchBtn.addEventListener('click', async () => {
+      const msg = input.value.trim();
+      if (!msg) return;
+      out.textContent = '正在执行相似检索...';
+      try {
+        const url = `/api/embedding/search?query=${encodeURIComponent(msg)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.text();
+        out.textContent = data;
+      } catch (e) {
+        out.textContent = '检索失败: ' + e.message;
+      }
+    });
+  </script>
+</body>
+</html>
